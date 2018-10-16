@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+}
+canvas {
+    background-color: black;
+    height: 100%;
+}
+#snapshot {
+    height: 50%;
+    background-color: black;
+}
