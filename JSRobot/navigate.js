@@ -3,7 +3,7 @@
         var field = Field();
         var robot = JSRobot({x: 0, y: 0}, "red");
         field.add(robot);
-
+        
         var canvas = document.querySelector("canvas");
         var context = canvas.getContext("2d");
 
@@ -33,12 +33,12 @@
 
         var adjust = function() {
             robot.setSpeeds(left, right);
-            //console.log("left and right wheel Speed: "+ left + " , " + right)
+            console.log("left and right wheel Speed: "+ left + " , " + right)
             window.setTimeout(adjust, 200);
         };
 
         robot.onMove(function(location) {
-           var destinationDirection = Math.atan2(destination.y-location.current.y, destination.x-location.current.x) * 180 / Math.PI;
+           var destinationDirection = Math.atan2(destination.y-location.current.y, destination.x-location.current.x) * 180 / Math.PI; 
            if(Math.abs(location.current.x - destination.x) < 10
             && Math.abs(location.current.y - destination.y) < 10) {
                 robot.stop();
@@ -53,11 +53,11 @@
                if(destinationDirection < location.current.direction
                || (Math.abs(destinationDirection - location.current.direction) > 180
                     && Math.abs(destinationDirection - location.current.direction)<360)) {
-                 right=0.98*right + 0.02*75;
-                 left=0.98*left + 0.02*25;
+                 right=0.9*right + 0.1*75;
+                 left=0.9*left + 0.1*25;
                } else {
-                 right=0.98*right + 0.02*25;
-                 left=0.98*left + 0.02*75;
+                 right=0.9*right + 0.1*25;
+                 left=0.9*left + 0.1*75;
                }
            }
         });

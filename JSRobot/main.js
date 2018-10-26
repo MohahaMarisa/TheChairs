@@ -1,4 +1,3 @@
-var angularVelocities = [0,0];//get's updated in the main.js
 var JSRobot = JSRobot || function(startLocation, color) {
   console.log("if wheel is 10cm, ");
   var wheelDiam = 6; //6cm
@@ -52,19 +51,19 @@ var JSRobot = JSRobot || function(startLocation, color) {
           previous: {
             x: previous.absoluteLocation.x,
             y: previous.absoluteLocation.y,
-            direction: previous.absoluteDirection
+            direction: previous.absoluteDirection                
           },
           current: {
             x: absoluteLocation.x,
             y: absoluteLocation.y,
-            direction: absoluteDirection
+            direction: absoluteDirection                
           }
         });
       }
       // Record previous
       previous.absoluteDirection = absoluteDirection;
       previous.absoluteLocation.x = absoluteLocation.x;
-      previous.absoluteLocation.y = absoluteLocation.y;
+      previous.absoluteLocation.y = absoluteLocation.y;  
   };
 
   that.render = function(context) {
@@ -73,7 +72,7 @@ var JSRobot = JSRobot || function(startLocation, color) {
           context.fillStyle = color;
           context.beginPath();
           context.arc(0, 0, 50, 0, Math.PI * 2);
-          context.stroke();
+          context.stroke();  
           context.fill();
 
           context.lineWidth = 10;
@@ -96,7 +95,7 @@ var JSRobot = JSRobot || function(startLocation, color) {
           context.arc(0, 0, 50, 0, Math.PI * 2);
           context.stroke();
       };
-
+      
       var drawFoot = function() {
           context.lineWidth = 1;
           context.fillStyle = "white";
@@ -115,8 +114,8 @@ var JSRobot = JSRobot || function(startLocation, color) {
           context.beginPath();
           context.rect(10, 0, 20, 20);
           context.fill();
-          context.stroke();
-      };
+          context.stroke();          
+      };  
 
       context.save();
       context.translate(context.canvas.width/2, context.canvas.height/2);
@@ -133,32 +132,30 @@ var JSRobot = JSRobot || function(startLocation, color) {
       context.translate(-20, -75);
       drawFoot();
       context.restore();
-
+            
   };
   var moveCallback;
   that.onMove = function(callback) {
     moveCallback = callback;
   };
-
+  
   that.setSpeeds = function(left, right) {
     window.requestAnimationFrame(function() {
       that.stop();
       vl = left;
       //pretend one pixel is a cm
       var angularVL = left/(wheelDiam*Math.PI) * 360;
-      //console.log("left angular velocity: " + angularVL + "per frame");
-      angularVelocities[0] = angularVL;
-
+      console.log("left angular velocity: " + angularVL + "per frame");
       vr = right;
       var angularVR = right/(wheelDiam*Math.PI) * 360;
-      //console.log("right angular velocity: " + angularVR + "per frame");
-      angularVelocities[1] = angularVR;
+      console.log("right angular velocity: " + angularVR + "per frame");
+      
       that.start();
     });
   };
 
   that.stop = function() {
-    started = false;
+    started = false; 
   };
 
   that.start = function() {
@@ -167,10 +164,10 @@ var JSRobot = JSRobot || function(startLocation, color) {
       startTime = undefined;
       startLocation.x = absoluteLocation.x;
       startLocation.y = absoluteLocation.y;
-      startDirection = absoluteDirection;
+      startDirection = absoluteDirection;            
     });
   };
-
+  
   that.isX = function(x) {
     return is(x, previous.absoluteLocation.x, absoluteLocation.x);
   };
@@ -186,5 +183,5 @@ var JSRobot = JSRobot || function(startLocation, color) {
         ||(one > limit && other <= limit));
   }
 
-  return that;
+  return that;      
 };
