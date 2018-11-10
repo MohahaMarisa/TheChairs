@@ -21,6 +21,11 @@ client.on('connect', function(){
   // }, 1000);
 });
 
-client.on('message', function(topic, message) {
+client.on('message', function(topic, message) {//detected where it's lvoe interest is! (angle relative to it's front)
   console.log('new message:', topic, message.toString());
+  //idk if we can get distance from the IR, so I'm gonna set it basically as 1m away
+  destination.x = location.current.x + 100 * cos(location.current.direction + message);
+  destination.y = location.current.y + 100 * cos(location.current.direction + message);;
+  //everytime it sees the other chair, it should stop, and 'talk' nod it's head!
+  //the arduino code should only send it's estimate of the location of the other chair if it sees a strong enough signal
 });

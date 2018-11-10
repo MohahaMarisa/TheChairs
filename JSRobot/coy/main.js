@@ -1,6 +1,8 @@
 var angularVelocities = [0,0];//get's updated in the main.js
 var JSRobot = JSRobot || function(startLocation, color) {
   console.log("if wheel is 10cm, ");
+
+  var mood; //perlin noise informed mood determines behavior sets
   var wheelDiam = 6; //6cm
   var that = {};
   var startLocation = startLocation || {x: 0, y: 0};

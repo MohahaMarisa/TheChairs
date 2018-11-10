@@ -1,6 +1,6 @@
 var angularVelocities = [0,0];//get's updated in the main.js
 var JSRobot = JSRobot || function(startLocation, color) {
-  console.log("if wheel is 10cm, ");
+  console.log("if wheel is 6cm, ");
   var wheelDiam = 6; //6cm
   var that = {};
   var startLocation = startLocation || {x: 0, y: 0};
@@ -170,7 +170,20 @@ var JSRobot = JSRobot || function(startLocation, color) {
       startDirection = absoluteDirection;
     });
   };
-
+  //MINI MOOOOOOVESSSSS
+  that.spiral = function() {//clockwise
+      left *= 1.01;
+      right *= 0.99;
+  }
+  that.stutterBackForth = function() {
+    if(right > left){
+      left = right;
+    }else{
+      right = left;
+    }
+    right *= -1;
+    left *= -1;
+  }
   that.isX = function(x) {
     return is(x, previous.absoluteLocation.x, absoluteLocation.x);
   };

@@ -1,3 +1,4 @@
+var destination = {x: 0, y: 0};
 (function(){
     window.addEventListener("load", function() {
         var field = Field();
@@ -9,7 +10,6 @@
 
         var left = 0;
         var right = 0;
-        var destination = {x: 0, y: 0};
 
         canvas.addEventListener("click", function(event) {
            destination.y = (event.target.height * event.clientY / event.target.clientHeight) - 500;
