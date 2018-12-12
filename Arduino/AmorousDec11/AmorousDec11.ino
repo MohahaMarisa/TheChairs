@@ -191,7 +191,12 @@ void loop(){
   }
 }*/
 void loop(){
-  oneWheelTurnBy(90);
+  if (!readingIR){
+    receivedValue = (receivedValue +180)%360;
+    Serial.print(". — Fake");
+    turnToExactAngle(receivedValue);
+  }
+  bigCircle();
   delay(3000);
 }
 //BASIC MOVES ////////////////////////////////////////////////////
@@ -211,14 +216,14 @@ void turnToExactAngle(int angleRecieved){
   move(rDirection * exactStep, lDirection * exactStep);
 }
 void oneWheelTurnBy(int angleRecieved){
-  long angleRelative = angleRecieved*1.0;
+  long angleRelative = abs(angleRecieved);
   //positive angleRelative means clockwise, as in left wheel moves
   long howFarWheelGoes = (angleRelative/360.0) * twoWheelDiam * 2.0 * PI;
   long exactStep = (howFarWheelGoes/ (wheelDiameter * PI)) * stepsPerRevolution; 
-  if (angleRelative < 0){
+  if (angleRecieved < 0){
     move(exactStep, 0);
   }else{
-    move(0, -1*exactStep);
+    move(0, exactStep);
   }
 }
 
@@ -227,11 +232,12 @@ void oneWheelTurnBy(int angleRecieved){
 void tentativeGrapevine(){
   //half steps that get the other chair roughly always to the side of it
   int howMany = int(random(10,30));
+  oneWheelTurnBy(45);
   for(int i = 0; i < howMany; i ++){
     if(i%2 == 1){
-      oneWheelTurnBy(180);//degrees clockwise
+      oneWheelTurnBy(90);//degrees clockwise
     }else{
-      oneWheelTurnBy(-180);//degrees counterclockwise
+      oneWheelTurnBy(-90);//degrees counterclockwise
     }
     delay(200);
   }
@@ -254,11 +260,14 @@ void infinityLoop(){
   }
 }
 void forwardIncreasing(){
-  long maxRev = random(2,8);
+  long maxRev = random(1,5);
+  long steps = 100;
   for(int i = 0; i < 10; i ++){
-     long steps = maxRev*stepsPerRevolution / (10.0*i);
+     steps = steps*0.9 + 0.1*maxRev*stepsPerRevolution;
+     Serial.print(steps);
+     Serial.print(", ");
      move(steps, steps);
-     delay(100);
+     delay(1000);
      turnToExactAngle(receivedValue);  
   }
 }
@@ -268,18 +277,25 @@ void forwardDecreasing(){
   for(int i = 10; i > 0; i --){
      move(steps, steps);
      delay(200);
-     steps = steps * 0.6;
+     steps = steps * 0.4;
      turnToExactAngle(receivedValue);  
   }
   delay(maxRev*100);
 }
 void bigCircle(){
   oneWheelTurnBy(90);
-  for(int i = 0; i<180; i++){//180*2 = 360 degrees eventually
-    move(400,400);
-    oneWheelTurnBy(-2);
+  long repeatNum = random(1,5);
+  float bigDiam = random(50,150);
+  float proportionOfInner = (bigDiam/2.0 - twoWheelDiam)/(bigDiam/2.0);
+  Serial.print("  ,  ");
+  Serial.println(proportionOfInner);
+  long stepsForCircle = (bigDiam * PI) /(wheelDiameter*PI) *stepsPerRevolution;
+  for(int i = 0; i<90; i++){//180*2 = 360 degrees eventually
+    move(stepsForCircle*proportionOfInner/90, stepsForCircle/90);
   }
   delay(4000);
+  rightWheel.setSpeed(500);
+  leftWheel.setSpeed(500);
 }
 void followArc(){
   for(int i = 0; i < 5; i ++){
@@ -295,7 +311,7 @@ void followArc(){
 void creepAlong(){
   for(int i = 0; i < 15; i ++){
     long stepRandom = random(10,50);
-    move(stepRandom, stepRandom);
+    move(stepRandom,stepRandom);
     if(abs(receivedValue -  90) > 20){
       turnToExactAngle(receivedValue); 
     }else{
@@ -305,9 +321,9 @@ void creepAlong(){
   }
 }
 void lookaround(){
-  long turnABit = random(-40,40);
+  long turnABit = random(-90,90);
   long waitABit = random(900,3500);
-  int repeatABit = int(random(2,6));
+  int repeatABit = int(random(2,4));
   for(int i=0; i<repeatABit; i++){
     turnToExactAngle(90+turnABit);
     delay(waitABit);
